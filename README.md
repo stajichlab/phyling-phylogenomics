@@ -258,9 +258,9 @@ phyling-phylogenomics/
 
 If you use this pipeline, please cite the underlying tools:
 
-- **PHYling**: https://github.com/stajichlab/PHYling_unified
-- **PhyKIT**: Steenwyk et al. (2021) *Bioinformatics* 37:2325–2328
-- **ModelTest-NG**: Darriba et al. (2020) *Mol Biol Evol* 37:291–294
+- **PHYling**: Tsai et al. (2026) *G3* jkag062 [https://doi.org/10.1093/g3journal/jkag062](doi:10.1093/g3journal/jkag062)
+- **PhyKIT**: Steenwyk et al. (2021) *Bioinformatics* 37:2325–2328 https://doi.org/10.1093/bioinformatics/btab096
+- **ModelTest-NG**: Darriba et al. (2020) *Mol Biol Evol* 37:291–294 
 - **IQ-TREE 3**: Minh et al. (2020) *Mol Biol Evol* 37:1530–1534
 - **RAxML-NG**: Kozlov et al. (2019) *Bioinformatics* 35:4453–4455
 - **BUSCO**: Manni et al. (2021) *Mol Biol Evol* 38:4647–4654
