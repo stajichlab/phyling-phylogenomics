@@ -2,7 +2,7 @@ process PHYLING_FILTER {
     tag "${markerset}"
     label 'process_medium'
 
-    publishDir "${params.outdir}/${params.seq_type}/filter/${params.markerset}", mode: params.publish_mode
+    publishDir "${params.outdir}/${params.seq_type}/filter/${markerset}", mode: params.publish_mode
 
     input:
     tuple val(markerset), val(seq_type), path(align_dir)

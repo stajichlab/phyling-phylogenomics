@@ -2,7 +2,7 @@ process PHYLING_ALIGN {
     tag "${markerset}"
     label 'process_high_memory'
 
-    publishDir "${params.outdir}/${params.seq_type}/align/${params.markerset}", mode: params.publish_mode
+    publishDir "${params.outdir}/${params.seq_type}/align/${markerset}", mode: params.publish_mode
     //publishDir "${params.outdir}//align/${markerset}", mode: params.publish_mode
 
     input:

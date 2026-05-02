@@ -1,8 +1,8 @@
 process PHYKIT_CONCAT {
     tag "${markerset}"
-    label 'process_low'
+    label "process_short"
 
-    publishDir "${params.outdir}/${params.seq_type}/buildtree/${params.markerset}", mode: params.publish_mode
+    publishDir "${params.outdir}/${params.seq_type}/buildtree/${markerset}", mode: params.publish_mode
 
     input:
     tuple val(markerset), val(seq_type), path(filter_dir), val(stem)
@@ -14,7 +14,9 @@ process PHYKIT_CONCAT {
     script:
     """
     ls ${filter_dir}/*.mfa > filenames
+    echo "stem = ${stem}"
     phykit create_concat -a filenames -p ${stem}
-    sed -i 's/AUTO/${data_type}/' ${stem}.partition
+    sed -i "s/AUTO/${data_type}/" ${stem}.partition
+    sed -i -E "s|[[:space:]]+${filter_dir}/||" ${stem}.partition
     """
 }
