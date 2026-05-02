@@ -2,7 +2,7 @@ process PHYLING_TREE {
     tag "${markerset}"
     label 'process_medium'
 
-    publishDir "${params.outdir}/${seq_type}/tree/${markerset}", mode: params.publish_mode
+    publishDir "${params.outdir}/${params.seq_type}/tree/${params.markerset}", mode: params.publish_mode
 
     input:
     tuple val(markerset), val(seq_type), path(filter_dir)

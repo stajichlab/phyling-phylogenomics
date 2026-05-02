@@ -4,7 +4,7 @@ process IQTREE_MF {
     tag "${markerset}:${score}"
     label 'process_tree'
 
-    publishDir "${params.outdir}/${seq_type}/buildtree/${markerset}", mode: params.publish_mode
+    publishDir "${params.outdir}/${params.seq_type}/buildtree/${params.markerset}", mode: params.publish_mode
 
     input:
     tuple val(markerset), val(seq_type), path(concat_fa), path(partition), val(score)

@@ -11,16 +11,16 @@ include { RAXMLNG_PARSE     } from '../modules/local/raxmlng/parse/main'
 include { RAXMLNG_ALL       } from '../modules/local/raxmlng/all/main'
 
 workflow CDS_TREE {
-    def mode             = 'cds'
+    def seq_type	 = 'cds'
     def data_type        = 'DNA'
-    def phykit_stem_base = "${mode}-${params.prefix}"
+    def phykit_stem_base = "${seq_type}-${params.prefix}"
 
     ch_input_dir  = file(params.input, checkIfExists: true)
     ch_markersets = Channel.of(params.markerset.tokenize(',')).flatten()
 
     // ── Step 1: align each markerset ──────────────────────────────
     PHYLING_ALIGN(
-        ch_markersets.map { ms -> [ ms, mode, ch_input_dir ] }
+        ch_markersets.map { ms -> [ ms, seq_type, ch_input_dir ] }
     )
 
     // ── Step 2: filter alignments ─────────────────────────────────
