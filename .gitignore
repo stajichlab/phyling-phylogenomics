@@ -1,0 +1,19 @@
+# Nextflow work directory and cache
+work/
+.nextflow/
+.nextflow.log*
+
+# Results published by the pipeline (project-specific, not tracked)
+results/
+
+# Pixi environment (large; reproducible from pixi.toml)
+.pixi/
+
+# Nextflow reports
+pipeline_info/
+
+# Editor and OS
+.DS_Store
+*.swp
+*~
+__pycache__/

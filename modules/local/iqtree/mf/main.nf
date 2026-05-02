@@ -1,0 +1,29 @@
+// Model selection + tree search with partition merging.
+// Runs once per (markerset, score) combination.
+process IQTREE_MF {
+    tag "${markerset}:${score}"
+    label 'process_tree'
+
+    publishDir "${params.outdir}/${mode}/buildtree/${markerset}", mode: params.publish_mode
+
+    input:
+    tuple val(markerset), val(mode), path(concat_fa), path(partition), val(score)
+
+    output:
+    tuple val(markerset), val(mode), val(score), path(concat_fa), path("*.best_scheme.nex"), emit: best_scheme
+    tuple val(markerset), val(mode), val(score), path("*.treefile"),                         emit: treefile, optional: true
+    path "*.log",                                                                             emit: logs,    optional: true
+
+    script:
+    def prefix = "${concat_fa.baseName}.${score}"
+    """
+    iqtree3 \\
+        -s ${concat_fa} \\
+        -p ${partition} \\
+        -m MF+MERGE \\
+        -rcluster ${params.rcluster} \\
+        --prefix ${prefix} \\
+        -T AUTO \\
+        --ntmax ${task.cpus}
+    """
+}

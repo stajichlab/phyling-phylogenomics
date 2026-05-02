@@ -1,0 +1,21 @@
+[workspace]
+name = "mucor-phylogeny"
+channels = ["conda-forge","bioconda"]
+platforms = ["linux-64"]
+
+[dependencies]
+nextflow   = ">=24.0"
+modeltest-ng = "*"
+iqtree     = ">=2.3"    # bioconda package; provides the iqtree3 binary
+raxml-ng   = "*"
+python     = ">=3.10"
+phyling	   = ">=2.3.1"
+pip = ">=26.0.1,<27"
+
+[pypi-dependencies]
+# phyling and phykit are Python tools; install from PyPI if not on bioconda
+phykit  = "*"
+
+[tasks]
+run-cds = { cmd = "nextflow run main.nf --mode cds_tree", cwd = "." }
+run-pep = { cmd = "nextflow run main.nf --mode protein_tree", cwd = "." }

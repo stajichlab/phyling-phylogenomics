@@ -1,0 +1,58 @@
+nextflow.enable.dsl = 2
+
+include { PHYLING_ALIGN     } from '../modules/local/phyling/align/main'
+include { PHYLING_FILTER    } from '../modules/local/phyling/filter/main'
+include { PHYLING_TREE      } from '../modules/local/phyling/tree/main'
+include { PHYKIT_CONCAT     } from '../modules/local/phykit/concat/main'
+include { MODELTEST_NG      } from '../modules/local/modeltestng/main'
+include { IQTREE_MF         } from '../modules/local/iqtree/mf/main'
+include { IQTREE_BOOTSTRAP  } from '../modules/local/iqtree/bootstrap/main'
+include { RAXMLNG_PARSE     } from '../modules/local/raxmlng/parse/main'
+include { RAXMLNG_ALL       } from '../modules/local/raxmlng/all/main'
+
+workflow PROTEIN_TREE {
+    def mode             = 'pep'
+    def data_type        = 'PROT'
+    def phykit_stem_base = "${mode}-${params.prefix}"
+
+    ch_input_dir  = file(params.input, checkIfExists: true)
+    ch_markersets = Channel.of(params.markerset.tokenize(',')).flatten()
+
+    // ── Step 1: align each markerset ──────────────────────────────
+    PHYLING_ALIGN(
+        ch_markersets.map { ms -> [ ms, mode, ch_input_dir ] }
+    )
+
+    // ── Step 2: filter alignments ─────────────────────────────────
+    PHYLING_FILTER(PHYLING_ALIGN.out.align_dir)
+
+    // ── Step 3: per-gene FastTree (runs in parallel with concat) ──
+    PHYLING_TREE(PHYLING_FILTER.out.filter_dir)
+
+    // ── Step 4: concatenate filtered MSAs; fix partition data type ─
+    // stem per markerset: e.g. pep-mucor_jena_v8.fungi_odb10
+    ch_for_concat = PHYLING_FILTER.out.filter_dir.map { ms, m, fdir ->
+        [ ms, m, fdir, "${phykit_stem_base}.${ms}" ]
+    }
+    PHYKIT_CONCAT(ch_for_concat, data_type)
+
+    // ── Step 5: ModelTest-NG partitioned model selection ──────────
+    MODELTEST_NG(PHYKIT_CONCAT.out.concat)
+
+    // ── Step 6: split AIC / BIC and run IQ-TREE + RAxML-NG ───────
+    ch_aic = MODELTEST_NG.out.partitions.map { ms, m, fa, part_aic, part_bic ->
+        [ ms, m, fa, part_aic, 'aic' ]
+    }
+    ch_bic = MODELTEST_NG.out.partitions.map { ms, m, fa, part_aic, part_bic ->
+        [ ms, m, fa, part_bic, 'bic' ]
+    }
+    ch_scored = ch_aic.mix(ch_bic)
+
+    // IQ-TREE: model-finder + merge tree, then UFBoot + SH-aLRT
+    IQTREE_MF(ch_scored)
+    IQTREE_BOOTSTRAP(IQTREE_MF.out.best_scheme)
+
+    // RAxML-NG: parse binary + thread advice, then ML search + bootstraps
+    RAXMLNG_PARSE(ch_scored)
+    RAXMLNG_ALL(RAXMLNG_PARSE.out.parsed, params.bs_trees_pep)
+}
