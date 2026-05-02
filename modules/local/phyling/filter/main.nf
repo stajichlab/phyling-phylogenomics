@@ -17,6 +17,6 @@ process PHYLING_FILTER {
         -t ${task.cpus} \\
         -o filter_out \\
         --verbose \\
-        -n ${params.min_taxa_pct}
+        -n ${params.top_n_to_keep}
     """
 }

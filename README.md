@@ -135,7 +135,7 @@ nextflow run stajichlab/phyling-phylogenomics \
 | `--markerset` | `fungi_odb12,mucoromycota_odb12` | Comma-separated BUSCO lineage names |
 | `--outdir` | `results` | Directory for published outputs |
 | `--publish_mode` | `copy` | publishDir mode: `copy`, `link`, or `symlink` |
-| `--min_taxa_pct` | `80` | Min % of taxa to retain a locus (`phyling filter -n`) |
+| `--top_n_to_keep` | `80` | Number of top markers to retain (`TOP_N_TOVERR` in phyling filter `-n`) |
 | `--rcluster` | `10` | IQ-TREE partition merging aggressiveness |
 | `--bs_count` | `1000` | IQ-TREE UFBoot replicates (`-B`) |
 | `--alrt_count` | `1000` | IQ-TREE SH-aLRT replicates (`--alrt`) |
