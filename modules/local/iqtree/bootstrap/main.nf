@@ -3,14 +3,14 @@ process IQTREE_BOOTSTRAP {
     tag "${markerset}:${score}"
     label 'process_tree'
 
-    publishDir "${params.outdir}/${mode}/buildtree/${markerset}", mode: params.publish_mode
+    publishDir "${params.outdir}/${seq_type}/buildtree/${markerset}", mode: params.publish_mode
 
     input:
-    tuple val(markerset), val(mode), val(score), path(concat_fa), path(best_scheme)
+    tuple val(markerset), val(seq_type), val(score), path(concat_fa), path(best_scheme)
 
     output:
-    tuple val(markerset), val(mode), val(score), path("*.treefile"), emit: treefile
-    tuple val(markerset), val(mode), val(score), path("*.contree"),  emit: contree,  optional: true
+    tuple val(markerset), val(seq_type), val(score), path("*.treefile"), emit: treefile
+    tuple val(markerset), val(seq_type), val(score), path("*.contree"),  emit: contree,  optional: true
     path "*.log",                                                     emit: logs,    optional: true
 
     script:

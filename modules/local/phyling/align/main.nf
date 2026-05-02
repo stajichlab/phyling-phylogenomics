@@ -2,13 +2,13 @@ process PHYLING_ALIGN {
     tag "${markerset}"
     label 'process_high_memory'
 
-    publishDir "${params.outdir}/${mode}/align/${markerset}", mode: params.publish_mode
+    publishDir "${params.outdir}/${seq_type}/align/${markerset}", mode: params.publish_mode
 
     input:
-    tuple val(markerset), val(mode), path(input_dir)
+    tuple val(markerset), val(seq_type), path(input_dir)
 
     output:
-    tuple val(markerset), val(mode), path("align_out"), emit: align_dir
+    tuple val(markerset), val(seq_type), path("align_out"), emit: align_dir
 
     script:
     """

@@ -3,15 +3,15 @@ process RAXMLNG_ALL {
     tag "${markerset}:${score}"
     label 'process_tree'
 
-    publishDir "${params.outdir}/${mode}/buildtree/${markerset}", mode: params.publish_mode
+    publishDir "${params.outdir}/${seq_type}/buildtree/${markerset}", mode: params.publish_mode
 
     input:
-    tuple val(markerset), val(mode), val(score), path(rba), path(raxml_log)
+    tuple val(markerset), val(seq_type), val(score), path(rba), path(raxml_log)
     val bs_trees
 
     output:
-    tuple val(markerset), val(mode), val(score), path("*.raxml.bestTree"),  emit: best_tree
-    tuple val(markerset), val(mode), val(score), path("*.raxml.support"),   emit: support,  optional: true
+    tuple val(markerset), val(seq_type), val(score), path("*.raxml.bestTree"),  emit: best_tree
+    tuple val(markerset), val(seq_type), val(score), path("*.raxml.support"),   emit: support,  optional: true
     path "*.raxml.log",                                                      emit: logs
 
     script:
